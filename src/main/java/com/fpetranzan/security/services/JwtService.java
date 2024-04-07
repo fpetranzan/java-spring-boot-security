@@ -1,4 +1,4 @@
-package com.fpetranzan.security.service;
+package com.fpetranzan.security.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
