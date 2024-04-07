@@ -13,8 +13,9 @@ spring:
         format_sql: true
       database: mysql
       database-platform: org.hibernate.dialect.MySQL5Dialect
-  application:
-    security:
-      jwt:
-        secret-key: 8C45AAD80AEE55465C96EB7C2766DA5B61B8D78176B3266B07386329485B2600
-        expiration: 86400000 # a day
+
+application:
+  security:
+    jwt:
+      secret-key: 8C45AAD80AEE55465C96EB7C2766DA5B61B8D78176B3266B07386329485B2600
+      expiration: 86400000 # a day
