@@ -27,7 +27,7 @@ public class SecurityConfig {
 			)
 			.authorizeHttpRequests(request ->
 				request
-					.requestMatchers("")
+					.requestMatchers("/api/v1/auth/**")
 					.permitAll()
 
 					.anyRequest()
