@@ -1,4 +1,4 @@
-package com.fpetranzan.security.config;
+package com.fpetranzan.security.configs;
 
 import com.fpetranzan.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
