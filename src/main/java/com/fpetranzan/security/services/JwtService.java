@@ -1,9 +1,14 @@
 package com.fpetranzan.security.services;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 public class JwtService {
 
@@ -28,9 +34,19 @@ public class JwtService {
 		return extractClaim(token, Claims::getSubject);
 	}
 
-	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-		final Claims claims = extractAllClaims(token);
-		return claimsResolver.apply(claims);
+	private <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
+		try {
+			return claimsResolver.apply(extractAllClaims(jwt));
+		} catch (SignatureException e) {
+			log.error("Invalid signature: " + e.getMessage());
+		} catch (MalformedJwtException e) {
+			log.error("Malformed JWT: " + e.getMessage());
+		} catch (ExpiredJwtException e) {
+			log.error("Expired JWT: " + e.getMessage());
+		} catch (UnsupportedJwtException e) {
+			log.error("Unsupported JWT: " + e.getMessage());
+		}
+		return null;
 	}
 
 	public String generateToken(UserDetails userDetails) {
