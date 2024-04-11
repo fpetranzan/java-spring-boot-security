@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpetranzan.security.auth.AuthenticationRequest;
 import com.fpetranzan.security.auth.AuthenticationResponse;
 import com.fpetranzan.security.auth.RegisterRequest;
+import com.fpetranzan.security.constants.AuthConstants;
 import com.fpetranzan.security.token.Token;
 import com.fpetranzan.security.token.TokenRepository;
 import com.fpetranzan.security.token.TokenType;
@@ -16,11 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -75,7 +73,7 @@ public class AuthenticationService {
 		final String refreshToken;
 		final String userEmail;
 
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+		if (authHeader == null || !authHeader.startsWith(AuthConstants.AUTHORIZATION_TYPE.BEARER)) {
 			return;
 		}
 
@@ -102,7 +100,7 @@ public class AuthenticationService {
 	private void revokeAllUserToken(User user) {
 		List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
 
-		if(validUserTokens.isEmpty()) {
+		if (validUserTokens.isEmpty()) {
 			return;
 		}
 
