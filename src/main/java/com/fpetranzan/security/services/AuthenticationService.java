@@ -38,10 +38,12 @@ public class AuthenticationService {
 		userRepository.save(user);
 
 		final String jwtToken = jwtService.generateToken(user);
+		final String jwtRefreshToken = jwtService.generateRefreshToken(user);
 		saveUserToken(user, jwtToken);
 
 		return AuthenticationResponse.builder()
 			.accessToken(jwtToken)
+			.refreshToken(jwtRefreshToken)
 			.build();
 	}
 
@@ -50,11 +52,13 @@ public class AuthenticationService {
 
 		User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 		final String jwtToken = jwtService.generateToken(user);
+		final String jwtRefreshToken = jwtService.generateRefreshToken(user);
 		revokeAllUserToken(user);
 		saveUserToken(user, jwtToken);
 
 		return AuthenticationResponse.builder()
 			.accessToken(jwtToken)
+			.refreshToken(jwtRefreshToken)
 			.build();
 	}
 
