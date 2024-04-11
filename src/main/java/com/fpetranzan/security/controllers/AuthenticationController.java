@@ -4,6 +4,8 @@ import com.fpetranzan.security.auth.AuthenticationRequest;
 import com.fpetranzan.security.auth.AuthenticationResponse;
 import com.fpetranzan.security.auth.RegisterRequest;
 import com.fpetranzan.security.services.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,5 +28,10 @@ public class AuthenticationController {
 	@PostMapping("/authenticate")
 	public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
 		return ResponseEntity.ok(authenticationService.authenticate(request));
+	}
+
+	@PostMapping("/refresh-token")
+	public void refresh(HttpServletRequest request, HttpServletResponse response) {
+		authenticationService.refreshToken(request, response);
 	}
 }
