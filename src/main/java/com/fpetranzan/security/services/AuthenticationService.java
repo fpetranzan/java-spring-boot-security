@@ -1,5 +1,6 @@
 package com.fpetranzan.security.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpetranzan.security.auth.AuthenticationRequest;
 import com.fpetranzan.security.auth.AuthenticationResponse;
 import com.fpetranzan.security.auth.RegisterRequest;
@@ -9,13 +10,20 @@ import com.fpetranzan.security.token.TokenType;
 import com.fpetranzan.security.user.Role;
 import com.fpetranzan.security.user.User;
 import com.fpetranzan.security.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -60,6 +68,35 @@ public class AuthenticationService {
 			.accessToken(jwtToken)
 			.refreshToken(jwtRefreshToken)
 			.build();
+	}
+
+	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+		final String refreshToken;
+		final String userEmail;
+
+		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+			return;
+		}
+
+		refreshToken = authHeader.substring(7);
+		userEmail = jwtService.extractUsername(refreshToken);
+
+		if (userEmail != null) {
+			User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+			if (jwtService.isTokenValid(refreshToken, user)) {
+				String accessToken = jwtService.generateToken(user);
+				revokeAllUserToken(user);
+				saveUserToken(user, accessToken);
+				AuthenticationResponse authResponse = AuthenticationResponse.builder()
+					.accessToken(accessToken)
+					.refreshToken(refreshToken)
+					.build();
+
+				new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+			}
+		}
 	}
 
 	private void revokeAllUserToken(User user) {
