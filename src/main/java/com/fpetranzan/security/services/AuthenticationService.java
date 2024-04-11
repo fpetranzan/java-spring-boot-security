@@ -74,7 +74,7 @@ public class AuthenticationService {
 		final String userEmail;
 
 		if (authHeader == null || !authHeader.startsWith(AuthConstants.AUTHORIZATION_TYPE.BEARER)) {
-			return;
+			throw new IOException("No token found in the request");
 		}
 
 		refreshToken = authHeader.substring(7);
