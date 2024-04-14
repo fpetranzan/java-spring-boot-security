@@ -4,12 +4,11 @@ import com.fpetranzan.security.models.auth.AuthenticationRequest;
 import com.fpetranzan.security.models.auth.AuthenticationResponse;
 import com.fpetranzan.security.models.auth.RegisterRequest;
 import com.fpetranzan.security.services.AuthenticationService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +32,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/refresh-token")
-	public ResponseEntity<AuthenticationResponse> refresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		return ResponseEntity.ok(authenticationService.refreshToken(request, response));
+	public AuthenticationResponse refreshToken(@RequestHeader("Authorization") String token) {
+		return authenticationService.refreshToken(token);
 	}
 }

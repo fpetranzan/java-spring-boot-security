@@ -1,5 +1,7 @@
 package com.fpetranzan.security.services;
 
+import com.fpetranzan.security.exceptions.InvalidAuthTokenException;
+import com.fpetranzan.security.exceptions.UserNotFoundForAuthException;
 import com.fpetranzan.security.models.auth.AuthenticationRequest;
 import com.fpetranzan.security.models.auth.AuthenticationResponse;
 import com.fpetranzan.security.models.auth.RegisterRequest;
@@ -10,17 +12,13 @@ import com.fpetranzan.security.models.token.TokenType;
 import com.fpetranzan.security.models.user.Role;
 import com.fpetranzan.security.models.user.User;
 import com.fpetranzan.security.repositories.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -67,33 +65,33 @@ public class AuthenticationService {
 			.build();
 	}
 
-	public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-		final String refreshToken;
+	public AuthenticationResponse refreshToken(String token) {
 		final String userEmail;
 
-		if (authHeader == null || !authHeader.startsWith(AuthConstants.AUTHORIZATION_TYPE.BEARER)) {
-			throw new IOException("No token found in the request");
+		if (token == null || !token.startsWith(AuthConstants.AUTHORIZATION_TYPE.BEARER)) {
+			throw new InvalidAuthTokenException("No token found in the request");
 		}
 
-		refreshToken = authHeader.substring(7);
-		userEmail = jwtService.extractUsername(refreshToken);
+		token = token.substring(7);
+		userEmail = jwtService.extractUsername(token);
 
 		if (userEmail != null) {
 			User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-			if (jwtService.isTokenValid(refreshToken, user)) {
+			if (jwtService.isTokenValid(token, user)) {
 				String accessToken = jwtService.generateToken(user);
 				revokeAllUserToken(user);
 				saveUserToken(user, accessToken);
 				return AuthenticationResponse.builder()
 					.accessToken(accessToken)
-					.refreshToken(refreshToken)
+					.refreshToken(token)
 					.build();
+			} else {
+				throw new InvalidAuthTokenException("Invalid refresh token");
 			}
+		} else {
+			throw new UserNotFoundForAuthException("User for token not found");
 		}
-
-		throw new IOException("No valid token found in the request");
 	}
 
 	private void revokeAllUserToken(User user) {
