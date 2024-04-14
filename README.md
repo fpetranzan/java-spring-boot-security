@@ -4,6 +4,7 @@ A MySQL database is used for data management.
 
 ## What has been implemented
 * User registration and login
+* Change password
 * Logout mechanism
 * Refresh token
 
