@@ -38,3 +38,10 @@ To build and run the project, follow these steps:
 * Run the project: mvn spring-boot:run
 
 -> The application will be available at http://localhost:8080.
+
+## Testing the project
+A postman collection has been created with all calls already defined.
+This way you can test all the created endpoints.
+You can retrieve the collection and import it to your Postman from here:
+
+[spring-boot-jwt-security - Postman Collection](https://github.com/fpetranzan/spring-boot-jwt-security/blob/master/src/main/resources/spring-boot-jwt-security.postman_collection.json)
