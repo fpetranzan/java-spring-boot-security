@@ -1,6 +1,7 @@
 package com.fpetranzan.security.services;
 
 import com.fpetranzan.security.exceptions.InvalidAuthTokenException;
+import com.fpetranzan.security.exceptions.UserAlreadyExistsException;
 import com.fpetranzan.security.exceptions.UserNotFoundForAuthException;
 import com.fpetranzan.security.models.auth.AuthenticationRequest;
 import com.fpetranzan.security.models.auth.AuthenticationResponse;
@@ -32,6 +33,10 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 
 	public AuthenticationResponse register(RegisterRequest request) {
+		userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
+			throw new UserAlreadyExistsException("The user already exists");
+		});
+
 		final User user = User.builder()
 			.lastname(request.getLastName())
 			.email(request.getEmail())
