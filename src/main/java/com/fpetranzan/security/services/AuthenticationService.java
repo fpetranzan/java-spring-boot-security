@@ -68,7 +68,7 @@ public class AuthenticationService {
 			.build();
 	}
 
-	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 		final String refreshToken;
 		final String userEmail;
@@ -87,14 +87,14 @@ public class AuthenticationService {
 				String accessToken = jwtService.generateToken(user);
 				revokeAllUserToken(user);
 				saveUserToken(user, accessToken);
-				AuthenticationResponse authResponse = AuthenticationResponse.builder()
+				return AuthenticationResponse.builder()
 					.accessToken(accessToken)
 					.refreshToken(refreshToken)
 					.build();
-
-				new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
 			}
 		}
+
+		throw new IOException("No valid token found in the request");
 	}
 
 	private void revokeAllUserToken(User user) {
