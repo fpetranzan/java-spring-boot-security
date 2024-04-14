@@ -1,0 +1,350 @@
+{
+	"info": {
+		"_postman_id": "ab468f16-663b-4774-952c-d732ffe1b061",
+		"name": "spring-boot-jwt-security",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34122059"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"var accessToken = responseJson.access_token;\r",
+							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							"\r",
+							"var refreshToken = responseJson.refresh_token;\r",
+							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"John\",\r\n    \"lastname\": \"Doe\",\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env}}/api/v1/auth/register",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"var accessToken = responseJson.access_token;\r",
+							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							"\r",
+							"var refreshToken = responseJson.refresh_token;\r",
+							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env}}/api/v1/auth/authenticate",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"var accessToken = responseJson.access_token;\r",
+							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							"\r",
+							"var refreshToken = responseJson.refresh_token;\r",
+							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{REFRESH_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{env}}/api/v1/auth/refresh-token",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"currentPassword\": \"1234\",\r\n    \"newPassword\": \"4321\",\r\n    \"confirmationPassword\": \"4321\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env}}/api/v1/users/change-password",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"change-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{env}}/api/v1/auth/logout",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Demo Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{env}}/api/v1/demo-controller",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"demo-controller"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manager Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{env}}/api/v1/management",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"management"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{env}}/api/v1/admin",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "env",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
