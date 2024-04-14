@@ -1,4 +1,4 @@
-package com.fpetranzan.security.controllers;
+package com.fpetranzan.security.tests;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,30 +9,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/admin")
-public class AdminController {
+@RequestMapping("/api/v1/management")
+public class ManagementController {
 
 	@GetMapping
-	@PreAuthorize("hasAuthority('admin:read')")
+	@PreAuthorize("hasAnyAuthority('admin:read','management:read')")
 	public String get() {
-		return "GET:: Admin Controller";
+		return "GET:: Management Controller";
 	}
 
 	@PutMapping
-	@PreAuthorize("hasAuthority('admin:update')")
+	@PreAuthorize("hasAnyAuthority('admin:update','management:update')")
 	public String put() {
-		return "PUT:: Admin Controller";
+		return "PUT:: Management Controller";
 	}
 
 	@PostMapping
-	@PreAuthorize("hasAuthority('admin:create')")
+	@PreAuthorize("hasAnyAuthority('admin:create','management:create')")
 	public String post() {
-		return "POST:: Admin Controller";
+		return "POST:: Management Controller";
 	}
 
 	@DeleteMapping
-	@PreAuthorize("hasAuthority('admin:delete')")
+	@PreAuthorize("hasAnyAuthority('admin:delete','management:delete')")
 	public String delete() {
-		return "DELETE:: Admin Controller";
+		return "DELETE:: Management Controller";
 	}
 }
