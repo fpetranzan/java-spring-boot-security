@@ -1,4 +1,4 @@
-package com.fpetranzan.security.auth;
+package com.fpetranzan.security.models.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

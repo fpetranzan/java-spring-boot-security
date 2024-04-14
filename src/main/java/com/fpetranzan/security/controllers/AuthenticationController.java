@@ -1,8 +1,8 @@
 package com.fpetranzan.security.controllers;
 
-import com.fpetranzan.security.auth.AuthenticationRequest;
-import com.fpetranzan.security.auth.AuthenticationResponse;
-import com.fpetranzan.security.auth.RegisterRequest;
+import com.fpetranzan.security.models.auth.AuthenticationRequest;
+import com.fpetranzan.security.models.auth.AuthenticationResponse;
+import com.fpetranzan.security.models.auth.RegisterRequest;
 import com.fpetranzan.security.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

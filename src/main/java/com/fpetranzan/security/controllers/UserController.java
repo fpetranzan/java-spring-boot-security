@@ -1,6 +1,6 @@
 package com.fpetranzan.security.controllers;
 
-import com.fpetranzan.security.auth.ChangePasswordRequest;
+import com.fpetranzan.security.models.auth.ChangePasswordRequest;
 import com.fpetranzan.security.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

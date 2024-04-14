@@ -1,6 +1,6 @@
-package com.fpetranzan.security.user;
+package com.fpetranzan.security.models.user;
 
-import com.fpetranzan.security.token.Token;
+import com.fpetranzan.security.models.token.Token;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

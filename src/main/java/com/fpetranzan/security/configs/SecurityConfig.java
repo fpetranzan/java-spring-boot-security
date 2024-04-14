@@ -13,8 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.fpetranzan.security.user.Role.ADMIN;
-import static com.fpetranzan.security.user.Role.MANAGER;
+import static com.fpetranzan.security.models.user.Role.ADMIN;
+import static com.fpetranzan.security.models.user.Role.MANAGER;
 
 @Configuration
 @EnableWebSecurity

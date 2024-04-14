@@ -1,4 +1,4 @@
-package com.fpetranzan.security.user;
+package com.fpetranzan.security.models.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.fpetranzan.security.auth;
+package com.fpetranzan.security.models.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

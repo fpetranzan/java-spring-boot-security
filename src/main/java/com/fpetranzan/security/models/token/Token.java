@@ -1,6 +1,6 @@
-package com.fpetranzan.security.token;
+package com.fpetranzan.security.models.token;
 
-import com.fpetranzan.security.user.User;
+import com.fpetranzan.security.models.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -1,14 +1,14 @@
 package com.fpetranzan.security.services;
 
-import com.fpetranzan.security.auth.AuthenticationRequest;
-import com.fpetranzan.security.auth.AuthenticationResponse;
-import com.fpetranzan.security.auth.RegisterRequest;
+import com.fpetranzan.security.models.auth.AuthenticationRequest;
+import com.fpetranzan.security.models.auth.AuthenticationResponse;
+import com.fpetranzan.security.models.auth.RegisterRequest;
 import com.fpetranzan.security.constants.AuthConstants;
-import com.fpetranzan.security.token.Token;
+import com.fpetranzan.security.models.token.Token;
 import com.fpetranzan.security.repositories.TokenRepository;
-import com.fpetranzan.security.token.TokenType;
-import com.fpetranzan.security.user.Role;
-import com.fpetranzan.security.user.User;
+import com.fpetranzan.security.models.token.TokenType;
+import com.fpetranzan.security.models.user.Role;
+import com.fpetranzan.security.models.user.User;
 import com.fpetranzan.security.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
