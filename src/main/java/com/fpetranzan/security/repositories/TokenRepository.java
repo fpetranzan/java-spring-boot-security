@@ -1,5 +1,6 @@
-package com.fpetranzan.security.token;
+package com.fpetranzan.security.repositories;
 
+import com.fpetranzan.security.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

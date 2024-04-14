@@ -2,7 +2,7 @@ package com.fpetranzan.security.services;
 
 import com.fpetranzan.security.constants.AuthConstants;
 import com.fpetranzan.security.token.Token;
-import com.fpetranzan.security.token.TokenRepository;
+import com.fpetranzan.security.repositories.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

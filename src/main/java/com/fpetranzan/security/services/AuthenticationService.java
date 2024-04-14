@@ -1,16 +1,15 @@
 package com.fpetranzan.security.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpetranzan.security.auth.AuthenticationRequest;
 import com.fpetranzan.security.auth.AuthenticationResponse;
 import com.fpetranzan.security.auth.RegisterRequest;
 import com.fpetranzan.security.constants.AuthConstants;
 import com.fpetranzan.security.token.Token;
-import com.fpetranzan.security.token.TokenRepository;
+import com.fpetranzan.security.repositories.TokenRepository;
 import com.fpetranzan.security.token.TokenType;
 import com.fpetranzan.security.user.Role;
 import com.fpetranzan.security.user.User;
-import com.fpetranzan.security.user.UserRepository;
+import com.fpetranzan.security.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

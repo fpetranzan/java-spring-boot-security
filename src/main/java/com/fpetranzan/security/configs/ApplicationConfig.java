@@ -1,6 +1,6 @@
 package com.fpetranzan.security.configs;
 
-import com.fpetranzan.security.user.UserRepository;
+import com.fpetranzan.security.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

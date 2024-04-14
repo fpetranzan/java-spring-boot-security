@@ -2,7 +2,7 @@ package com.fpetranzan.security.configs;
 
 import com.fpetranzan.security.constants.AuthConstants;
 import com.fpetranzan.security.services.JwtService;
-import com.fpetranzan.security.token.TokenRepository;
+import com.fpetranzan.security.repositories.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

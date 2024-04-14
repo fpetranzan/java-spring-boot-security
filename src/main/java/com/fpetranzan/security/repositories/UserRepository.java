@@ -1,5 +1,6 @@
-package com.fpetranzan.security.user;
+package com.fpetranzan.security.repositories;
 
+import com.fpetranzan.security.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

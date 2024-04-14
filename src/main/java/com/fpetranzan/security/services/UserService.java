@@ -2,7 +2,7 @@ package com.fpetranzan.security.services;
 
 import com.fpetranzan.security.auth.ChangePasswordRequest;
 import com.fpetranzan.security.user.User;
-import com.fpetranzan.security.user.UserRepository;
+import com.fpetranzan.security.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
