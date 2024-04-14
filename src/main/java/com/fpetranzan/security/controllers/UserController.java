@@ -20,8 +20,7 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/change-password")
-	public ResponseEntity<ChangePasswordRequest> changePassword(@RequestBody ChangePasswordRequest request, Principal connectedUser) throws IOException {
+	public void changePassword(@RequestBody ChangePasswordRequest request, Principal connectedUser) {
 		userService.changePassword(request, connectedUser);
-		return ResponseEntity.ok().build();
 	}
 }
