@@ -5,6 +5,7 @@ import com.fpetranzan.security.exceptions.UserAlreadyExistsException;
 import com.fpetranzan.security.exceptions.UserNotFoundForAuthException;
 import com.fpetranzan.security.exceptions.WrongPasswordMatchException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,6 +39,11 @@ public class AuthenticationControllerExceptionHandler {
 
 	@ExceptionHandler(WrongPasswordMatchException.class)
 	public ResponseEntity<String> handleWrongPasswordMatchException(WrongPasswordMatchException ex, WebRequest request) {
+		return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
+	}
+
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
 		return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
 	}
 }
