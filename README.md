@@ -3,10 +3,12 @@ This project is a practical implementation of security using Spring Boot and JSO
 A MySQL database is used for data management.
 
 ## What has been implemented
-* User registration and login
+* User registration
+* User login
+* Two-factor authentication
+* Refresh token
 * Change password
 * Logout mechanism
-* Refresh token
 
 ### Implementation details
 * JWT authentication
