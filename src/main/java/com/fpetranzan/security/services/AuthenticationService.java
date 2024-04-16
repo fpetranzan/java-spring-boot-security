@@ -126,6 +126,26 @@ public class AuthenticationService {
 		}
 	}
 
+	public AuthenticationResponse verifyCode(VerificationRequest request) {
+		User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+		if (tfaService.isOtpNotValid(user.getSecret(), request.getCode())) {
+			throw new BadCredentialsException("Code is not correct");
+		}
+
+		final String jwtToken = jwtService.generateToken(user);
+		final String jwtRefreshToken = jwtService.generateRefreshToken(user);
+		revokeAllUserToken(user);
+		saveUserToken(user, jwtToken);
+
+		return AuthenticationResponse.builder()
+			.accessToken(jwtToken)
+			.refreshToken(jwtRefreshToken)
+			.build();
+	}
+
 	private void revokeAllUserToken(User user) {
 		List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
 
