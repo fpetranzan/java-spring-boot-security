@@ -96,26 +96,27 @@ public class AuthenticationService {
 			.build();
 	}
 
-	public AuthenticationResponse refreshToken(String token) {
+	public AuthenticationResponse refreshToken(String jwtRefreshToken) {
 		final String userEmail;
 
-		if (token == null || !token.startsWith(AuthConstants.AUTHORIZATION_TYPE.BEARER)) {
+		if (jwtRefreshToken == null || !jwtRefreshToken.startsWith(AuthConstants.AUTHORIZATION_TYPE.BEARER)) {
 			throw new InvalidAuthTokenException("No token found in the request");
 		}
 
-		token = token.substring(7);
-		userEmail = jwtService.extractUsername(token);
+		jwtRefreshToken = jwtRefreshToken.substring(7);
+		userEmail = jwtService.extractUsername(jwtRefreshToken);
 
 		if (userEmail != null) {
 			User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-			if (jwtService.isTokenValid(token, user)) {
-				String accessToken = jwtService.generateToken(user);
+			if (jwtService.isTokenValid(jwtRefreshToken, user)) {
+				String jwtToken = jwtService.generateToken(user);
 				revokeAllUserToken(user);
-				saveUserToken(user, accessToken);
+				saveUserToken(user, jwtToken);
 				return AuthenticationResponse.builder()
-					.accessToken(accessToken)
-					.refreshToken(token)
+					.accessToken(jwtToken)
+					.refreshToken(jwtRefreshToken)
+					.mfaEnabled(Boolean.FALSE)
 					.build();
 			} else {
 				throw new InvalidAuthTokenException("Invalid refresh token");
