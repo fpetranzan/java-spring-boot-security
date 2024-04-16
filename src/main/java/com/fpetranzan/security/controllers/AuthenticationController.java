@@ -3,9 +3,9 @@ package com.fpetranzan.security.controllers;
 import com.fpetranzan.security.models.auth.AuthenticationRequest;
 import com.fpetranzan.security.models.auth.AuthenticationResponse;
 import com.fpetranzan.security.models.auth.RegisterRequest;
+import com.fpetranzan.security.models.auth.VerificationRequest;
 import com.fpetranzan.security.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -32,7 +32,12 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/refresh-token")
-	public AuthenticationResponse refreshToken(@RequestHeader("Authorization") String token) {
-		return authenticationService.refreshToken(token);
+	public AuthenticationResponse refreshToken(@RequestHeader("Authorization") String jwtRefreshToken) {
+		return authenticationService.refreshToken(jwtRefreshToken);
+	}
+
+	@PostMapping("/verify")
+	public AuthenticationResponse verifyCode(@RequestBody VerificationRequest request) {
+		return authenticationService.verifyCode(request);
 	}
 }
