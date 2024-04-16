@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "ab468f16-663b-4774-952c-d732ffe1b061",
 		"name": "spring-boot-jwt-security",
+		"description": "a postman collection to run tests on the rest of the 'spring-boot-jwt-security' project calls.\n\nGITHUB: https://github.com/fpetranzan/spring-boot-jwt-security.git",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34122059"
 	},
@@ -25,10 +26,10 @@
 						"exec": [
 							"const responseJson = pm.response.json();\r",
 							"\r",
-							"var accessToken = responseJson.access_token;\r",
+							"var accessToken = responseJson.accessToken;\r",
 							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
 							"\r",
-							"var refreshToken = responseJson.refresh_token;\r",
+							"var refreshToken = responseJson.refreshToken;\r",
 							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
 						],
 						"type": "text/javascript",
@@ -37,11 +38,14 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstname\": \"John\",\r\n    \"lastname\": \"Doe\",\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"mfaEnabled\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -64,6 +68,64 @@
 			"response": []
 		},
 		{
+			"name": "Verify OTP",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"var accessToken = responseJson.accessToken;\r",
+							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"code\": \"996030\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env}}/api/v1/auth/verify",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Authenticate",
 			"event": [
 				{
@@ -72,10 +134,10 @@
 						"exec": [
 							"const responseJson = pm.response.json();\r",
 							"\r",
-							"var accessToken = responseJson.access_token;\r",
+							"var accessToken = responseJson.accessToken;\r",
 							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
 							"\r",
-							"var refreshToken = responseJson.refresh_token;\r",
+							"var refreshToken = responseJson.refreshToken;\r",
 							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
 						],
 						"type": "text/javascript",
@@ -119,10 +181,10 @@
 						"exec": [
 							"const responseJson = pm.response.json();\r",
 							"\r",
-							"var accessToken = responseJson.access_token;\r",
+							"var accessToken = responseJson.accessToken;\r",
 							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
 							"\r",
-							"var refreshToken = responseJson.refresh_token;\r",
+							"var refreshToken = responseJson.refreshToken;\r",
 							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
 						],
 						"type": "text/javascript",
@@ -316,7 +378,14 @@
 		}
 	],
 	"auth": {
-		"type": "bearer"
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{ACCESS_TOKEN}}",
+				"type": "string"
+			}
+		]
 	},
 	"event": [
 		{
