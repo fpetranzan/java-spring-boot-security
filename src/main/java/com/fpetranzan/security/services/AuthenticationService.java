@@ -161,13 +161,16 @@ public class AuthenticationService {
 	}
 
 	private void saveUserToken(User user, String jwtToken) {
-		final Token token = Token.builder()
-			.user(user)
-			.token(jwtToken)
-			.tokenType(TokenType.BEARER)
-			.expired(Boolean.FALSE)
-			.revoked(Boolean.FALSE)
-			.build();
-		tokenRepository.save(token);
+		if (user != null && !jwtToken.equals("")) {
+			final Token token = Token.builder()
+				.user(user)
+				.token(jwtToken)
+				.tokenType(TokenType.BEARER)
+				.expired(Boolean.FALSE)
+				.revoked(Boolean.FALSE)
+				.build();
+
+			tokenRepository.save(token);
+		}
 	}
 }
