@@ -31,27 +31,41 @@ public class AuthenticationService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
+	private final TwoFactorAuthenticationService tfaService;
 
 	public AuthenticationResponse register(RegisterRequest request) {
 		userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
 			throw new UserAlreadyExistsException("The user already exists");
 		});
 
+		String qrCodeImage = "";
+		String jwtToken = "";
+		String jwtRefreshToken = "";
 		final User user = User.builder()
+			.firstname(request.getFirstName())
 			.lastname(request.getLastName())
 			.email(request.getEmail())
 			.password(passwordEncoder.encode(request.getPassword()))
 			.role(Role.USER)
+			.mfaEnabled(request.isMfaEnabled())
 			.build();
-		userRepository.save(user);
 
-		final String jwtToken = jwtService.generateToken(user);
-		final String jwtRefreshToken = jwtService.generateRefreshToken(user);
+		if (request.isMfaEnabled()) {
+			user.setSecret(tfaService.genereteNewSecret());
+			qrCodeImage = tfaService.genereteQrCodeImageUrl(user.getSecret());
+		} else {
+			jwtToken = jwtService.generateToken(user);
+			jwtRefreshToken = jwtService.generateRefreshToken(user);
+		}
+
+		userRepository.save(user);
 		saveUserToken(user, jwtToken);
 
 		return AuthenticationResponse.builder()
 			.accessToken(jwtToken)
 			.refreshToken(jwtRefreshToken)
+			.mfaEnabled(request.isMfaEnabled())
+			.qrCodeImageUri(qrCodeImage)
 			.build();
 	}
 
