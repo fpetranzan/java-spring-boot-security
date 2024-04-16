@@ -7,6 +7,7 @@ import com.fpetranzan.security.models.auth.AuthenticationRequest;
 import com.fpetranzan.security.models.auth.AuthenticationResponse;
 import com.fpetranzan.security.models.auth.RegisterRequest;
 import com.fpetranzan.security.constants.AuthConstants;
+import com.fpetranzan.security.models.auth.VerificationRequest;
 import com.fpetranzan.security.models.token.Token;
 import com.fpetranzan.security.repositories.TokenRepository;
 import com.fpetranzan.security.models.token.TokenType;
@@ -15,6 +16,7 @@ import com.fpetranzan.security.models.user.User;
 import com.fpetranzan.security.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,6 +75,15 @@ public class AuthenticationService {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
 		User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+		if (user.isMfaEnabled()) {
+			return AuthenticationResponse.builder()
+				.accessToken("")
+				.refreshToken("")
+				.mfaEnabled(Boolean.TRUE)
+				.build();
+		}
+
 		final String jwtToken = jwtService.generateToken(user);
 		final String jwtRefreshToken = jwtService.generateRefreshToken(user);
 		revokeAllUserToken(user);
@@ -81,6 +92,7 @@ public class AuthenticationService {
 		return AuthenticationResponse.builder()
 			.accessToken(jwtToken)
 			.refreshToken(jwtRefreshToken)
+			.mfaEnabled(Boolean.FALSE)
 			.build();
 	}
 
