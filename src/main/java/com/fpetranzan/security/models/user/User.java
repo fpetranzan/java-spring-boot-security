@@ -32,9 +32,10 @@ public class User implements UserDetails {
 	private Integer id;
 	private String firstname;
 	private String lastname;
-	@Column(unique = true)
 	private String email;
 	private String password;
+	private boolean mfaEnabled;
+	private String secret;
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
