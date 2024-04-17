@@ -16,8 +16,8 @@ import dev.samstevens.totp.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
+@Service
 public class TwoFactorAuthenticationService {
 
 	public String genereteNewSecret() {
