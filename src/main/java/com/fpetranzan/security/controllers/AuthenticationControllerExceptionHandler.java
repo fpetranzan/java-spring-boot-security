@@ -4,6 +4,7 @@ import com.fpetranzan.security.exceptions.InvalidAuthTokenException;
 import com.fpetranzan.security.exceptions.UserAlreadyExistsException;
 import com.fpetranzan.security.exceptions.UserNotFoundForAuthException;
 import com.fpetranzan.security.exceptions.WrongPasswordMatchException;
+import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -51,5 +52,10 @@ public class AuthenticationControllerExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
 		return ResponseEntity.status(BAD_REQUEST).body(ex.getFieldError().getDefaultMessage());
+	}
+
+	@ExceptionHandler(MessagingException.class)
+	public ResponseEntity<String> handleMessagingException(MessagingException ex, WebRequest request) {
+		return ResponseEntity.status(BAD_REQUEST).body("Error during send email, please try later.");
 	}
 }
