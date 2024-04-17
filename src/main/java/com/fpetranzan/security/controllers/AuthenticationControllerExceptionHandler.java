@@ -7,6 +7,7 @@ import com.fpetranzan.security.exceptions.WrongPasswordMatchException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -45,5 +46,10 @@ public class AuthenticationControllerExceptionHandler {
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
 		return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
+		return ResponseEntity.status(BAD_REQUEST).body(ex.getFieldError().getDefaultMessage());
 	}
 }
