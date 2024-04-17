@@ -47,3 +47,6 @@ This way you can test all the created endpoints.
 You can retrieve the collection and import it to your Postman from here:
 
 [spring-boot-jwt-security - Postman Collection](https://github.com/fpetranzan/spring-boot-jwt-security/blob/master/src/main/resources/spring-boot-jwt-security.postman_collection.json)
+
+To be able to test sending emails on your local environment, you can use the following open-source project:
+https://github.com/gessnerfl/fake-smtp-server
