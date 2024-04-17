@@ -13,6 +13,21 @@ spring:
         format_sql: true
       database: mysql
       database-platform: org.hibernate.dialect.MySQL5Dialect
+  mail:
+    host: localhost
+    port: 8025
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
 
 application:
   security:
@@ -21,3 +36,8 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # a week
+  mailing:
+    frontend:
+      activation-url: http://localhost:3000/activate-account
+server:
+  port: 8088
