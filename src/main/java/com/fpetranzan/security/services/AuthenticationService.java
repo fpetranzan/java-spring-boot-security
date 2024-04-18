@@ -3,6 +3,7 @@ package com.fpetranzan.security.services;
 import com.fpetranzan.security.exceptions.InvalidAuthTokenException;
 import com.fpetranzan.security.exceptions.UserAlreadyExistsException;
 import com.fpetranzan.security.exceptions.UserNotFoundForAuthException;
+import com.fpetranzan.security.exceptions.UserNotVerifiedException;
 import com.fpetranzan.security.models.auth.AuthenticationRequest;
 import com.fpetranzan.security.models.auth.AuthenticationResponse;
 import com.fpetranzan.security.models.auth.RegisterRequest;
@@ -59,6 +60,7 @@ public class AuthenticationService {
 			.email(request.getEmail())
 			.password(passwordEncoder.encode(request.getPassword()))
 			.role(Role.USER)
+			.enabled(Boolean.FALSE)
 			.mfaEnabled(request.isMfaEnabled())
 			.build();
 
@@ -80,6 +82,8 @@ public class AuthenticationService {
 		savedToken.setValidatedAt(LocalDateTime.now());
 
 		User user = userRepository.findById(savedToken.getUser().getId()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+		user.setEnabled(Boolean.TRUE);
+
 		String qrCodeImage = "";
 		String jwtToken = "";
 		String jwtRefreshToken = "";
@@ -106,28 +110,32 @@ public class AuthenticationService {
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
 		User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-		if (user.isMfaEnabled()) {
+		if (user.isEnabled()) {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+			if (user.isMfaEnabled()) {
+				return AuthenticationResponse.builder()
+					.accessToken("")
+					.refreshToken("")
+					.mfaEnabled(Boolean.TRUE)
+					.build();
+			}
+
+			final String jwtToken = jwtService.generateToken(user);
+			final String jwtRefreshToken = jwtService.generateRefreshToken(user);
+			revokeAllUserToken(user);
+			saveUserToken(user, jwtToken);
+
 			return AuthenticationResponse.builder()
-				.accessToken("")
-				.refreshToken("")
-				.mfaEnabled(Boolean.TRUE)
+				.accessToken(jwtToken)
+				.refreshToken(jwtRefreshToken)
+				.mfaEnabled(Boolean.FALSE)
 				.build();
 		}
 
-		final String jwtToken = jwtService.generateToken(user);
-		final String jwtRefreshToken = jwtService.generateRefreshToken(user);
-		revokeAllUserToken(user);
-		saveUserToken(user, jwtToken);
-
-		return AuthenticationResponse.builder()
-			.accessToken(jwtToken)
-			.refreshToken(jwtRefreshToken)
-			.mfaEnabled(Boolean.FALSE)
-			.build();
+		throw new UserNotVerifiedException("User not verify, please check your inbox");
 	}
 
 	public AuthenticationResponse refreshToken(String jwtRefreshToken) {
