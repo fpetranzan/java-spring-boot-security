@@ -3,6 +3,7 @@ package com.fpetranzan.security.controllers;
 import com.fpetranzan.security.exceptions.InvalidAuthTokenException;
 import com.fpetranzan.security.exceptions.UserAlreadyExistsException;
 import com.fpetranzan.security.exceptions.UserNotFoundForAuthException;
+import com.fpetranzan.security.exceptions.UserNotVerifiedException;
 import com.fpetranzan.security.exceptions.WrongPasswordMatchException;
 import com.fpetranzan.security.models.exception.ExceptionResponse;
 import jakarta.mail.MessagingException;
@@ -22,6 +23,7 @@ import static com.fpetranzan.security.models.exception.BusinessErrorCodes.NO_USE
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.PASSWORD_ERROR;
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.USER_EXISTS;
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.USER_NOT_FOUND;
+import static com.fpetranzan.security.models.exception.BusinessErrorCodes.USER_NOT_VERIFIED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -64,6 +66,19 @@ public class AuthenticationControllerExceptionHandler {
 				ExceptionResponse.builder()
 					.businessErrorCode(NO_USER_FOR_TOKEN.getCode())
 					.businessErrorDescription(NO_USER_FOR_TOKEN.getDescription())
+					.error(ex.getMessage())
+					.build()
+			);
+	}
+
+	@ExceptionHandler(UserNotVerifiedException.class)
+	public ResponseEntity<ExceptionResponse> handleUserNotVerifiedException(UserNotVerifiedException ex, WebRequest request) {
+		return ResponseEntity
+			.status(UNAUTHORIZED)
+			.body(
+				ExceptionResponse.builder()
+					.businessErrorCode(USER_NOT_VERIFIED.getCode())
+					.businessErrorDescription(USER_NOT_VERIFIED.getDescription())
 					.error(ex.getMessage())
 					.build()
 			);
