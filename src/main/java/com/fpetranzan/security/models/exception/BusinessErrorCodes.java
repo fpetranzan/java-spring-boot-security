@@ -16,7 +16,8 @@ public enum BusinessErrorCodes {
 	INVALID_TOKEN(400, BAD_REQUEST, "Invalid access token"),
 	BAD_CREDENTIALS(403, FORBIDDEN, "Email and / or Password is incorrect"),
 	USER_NOT_FOUND(404, NOT_FOUND, "User not found"),
-	NO_USER_FOR_TOKEN(406, NOT_ACCEPTABLE, "User not found for auth token");
+	NO_USER_FOR_TOKEN(406, NOT_ACCEPTABLE, "User not found for auth token"),
+	USER_NOT_VERIFIED(406, NOT_ACCEPTABLE, "User not verify");
 
 	@Getter
 	private final int code;
