@@ -24,7 +24,15 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							""
+							"if (pm.response.to.have.status(200)) {\r",
+							"    var user_id = pm.environment.get(\"LAST_CREATED_USER_ID\");\r",
+							"\r",
+							"    if (user_id != null) {\r",
+							"        pm.environment.set(\"LAST_CREATED_USER_ID\", user_id+1);\r",
+							"    } else {\r",
+							"        pm.environment.set(\"LAST_CREATED_USER_ID\", 1);\r",
+							"    }\r",
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -78,13 +86,15 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const responseJson = pm.response.json();\r",
+							"if (pm.response.to.have.status(200)) {\r",
+							"    const responseJson = pm.response.json();\r",
 							"\r",
-							"var accessToken = responseJson.accessToken;\r",
-							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							"    var accessToken = responseJson.accessToken;\r",
+							"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
 							"\r",
-							"var refreshToken = responseJson.refreshToken;\r",
-							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+							"    var refreshToken = responseJson.refreshToken;\r",
+							"    pm.environment.set(\"REFRESH_TOKEN\", refreshToken);\r",
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -110,7 +120,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{env}}/api/v1/auth/activate-account?token=307323",
+					"raw": "{{env}}/api/v1/auth/{{LAST_CREATED_USER_ID}}/activate-account?token=841086",
 					"host": [
 						"{{env}}"
 					],
@@ -118,12 +128,13 @@
 						"api",
 						"v1",
 						"auth",
+						"{{LAST_CREATED_USER_ID}}",
 						"activate-account"
 					],
 					"query": [
 						{
 							"key": "token",
-							"value": "307323"
+							"value": "841086"
 						}
 					]
 				}
@@ -147,11 +158,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const responseJson = pm.response.json();\r",
+							"if (pm.response.to.have.status(200)) {\r",
+							"    const responseJson = pm.response.json();\r",
 							"\r",
-							"var accessToken = responseJson.accessToken;\r",
-							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
-							""
+							"    var accessToken = responseJson.accessToken;\r",
+							"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -195,13 +207,15 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const responseJson = pm.response.json();\r",
+							"if (pm.response.to.have.status(200)) {\r",
+							"    const responseJson = pm.response.json();\r",
 							"\r",
-							"var accessToken = responseJson.accessToken;\r",
-							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							"    var accessToken = responseJson.accessToken;\r",
+							"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
 							"\r",
-							"var refreshToken = responseJson.refreshToken;\r",
-							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+							"    var refreshToken = responseJson.refreshToken;\r",
+							"    pm.environment.set(\"REFRESH_TOKEN\", refreshToken);\r",
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -242,13 +256,15 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const responseJson = pm.response.json();\r",
+							"if (pm.response.to.have.status(200)) {\r",
+							"    const responseJson = pm.response.json();\r",
 							"\r",
-							"var accessToken = responseJson.accessToken;\r",
-							"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+							"    var accessToken = responseJson.accessToken;\r",
+							"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
 							"\r",
-							"var refreshToken = responseJson.refreshToken;\r",
-							"pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+							"    var refreshToken = responseJson.refreshToken;\r",
+							"    pm.environment.set(\"REFRESH_TOKEN\", refreshToken);\r",
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
