@@ -9,6 +9,7 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,9 +30,9 @@ public class AuthenticationController {
 		authenticationService.register(request);
 	}
 
-	@GetMapping("/activate-account")
-	public AuthenticationResponse activateAccount(@RequestParam String token) throws MessagingException {
-		return authenticationService.activateAccount(token);
+	@GetMapping("/{userId}/activate-account")
+	public AuthenticationResponse activateAccount(@PathVariable Integer userId, @RequestParam String token) throws MessagingException {
+		return authenticationService.activateAccount(userId, token);
 	}
 
 	@PostMapping("/authenticate")
