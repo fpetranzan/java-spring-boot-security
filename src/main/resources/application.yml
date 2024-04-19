@@ -38,6 +38,6 @@ application:
         expiration: 604800000 # a week
   mailing:
     frontend:
-      activation-url: http://localhost:3000/activate-account
+      activation-url: http://localhost:3000/%d/activate-account
 server:
   port: 8088
