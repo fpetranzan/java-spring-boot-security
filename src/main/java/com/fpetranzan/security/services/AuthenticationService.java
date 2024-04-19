@@ -72,10 +72,13 @@ public class AuthenticationService {
 		sendValidationEmail(user);
 	}
 
-	public AuthenticationResponse activateAccount(String token) throws MessagingException {
-		ActivationToken savedToken = activationTokenRepository.findByToken(token).orElseThrow(() -> new InvalidAuthTokenException("Invalid token"));
+	public AuthenticationResponse activateAccount(Integer userId, String token) throws MessagingException {
+		ActivationToken savedToken = activationTokenRepository.findByUserAndToken(userId, token).orElseThrow(() -> new InvalidAuthTokenException("Invalid token"));
 
 		if (LocalDateTime.now().isAfter(savedToken.getExpiredAt())) {
+			savedToken.setValidatedAt(LocalDateTime.of(1900, 1, 1, 0, 0, 0, 0));
+			activationTokenRepository.save(savedToken);
+
 			sendValidationEmail(savedToken.getUser());
 			throw new InvalidAuthTokenException("Activation token has expired. A new token has been send to the same email");
 		}
@@ -221,7 +224,7 @@ public class AuthenticationService {
 
 		Map<String, Object> properties = new HashMap<>();
 		properties.put("username", user.getFullName());
-		properties.put("confirmation_url", activationUrl);
+		properties.put("confirmation_url", String.format(activationUrl, user.getId()));
 		properties.put("activation_code", activationToken);
 
 		emailService.sendEmail("emailverify.no-reply@springBootJwtSecurity.com", user.getEmail(), EmailTemplateName.ACTIVATE_ACCOUNT, "Account activation", properties);
