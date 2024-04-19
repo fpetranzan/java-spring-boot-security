@@ -20,7 +20,7 @@ import java.util.Set;
 
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.BAD_CREDENTIALS;
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.NO_USER_FOR_TOKEN;
-import static com.fpetranzan.security.models.exception.BusinessErrorCodes.PASSWORD_ERROR;
+import static com.fpetranzan.security.models.exception.BusinessErrorCodes.AUTHENTICATION_ERROR;
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.USER_EXISTS;
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.USER_NOT_FOUND;
 import static com.fpetranzan.security.models.exception.BusinessErrorCodes.USER_NOT_VERIFIED;
@@ -90,8 +90,8 @@ public class AuthenticationControllerExceptionHandler {
 			.status(BAD_REQUEST)
 			.body(
 				ExceptionResponse.builder()
-					.businessErrorCode(PASSWORD_ERROR.getCode())
-					.businessErrorDescription(PASSWORD_ERROR.getDescription())
+					.businessErrorCode(AUTHENTICATION_ERROR.getCode())
+					.businessErrorDescription(AUTHENTICATION_ERROR.getDescription())
 					.error(ex.getMessage())
 					.build()
 			);
@@ -103,8 +103,8 @@ public class AuthenticationControllerExceptionHandler {
 			.status(UNAUTHORIZED)
 			.body(
 				ExceptionResponse.builder()
-					.businessErrorCode(PASSWORD_ERROR.getCode())
-					.businessErrorDescription(PASSWORD_ERROR.getDescription())
+					.businessErrorCode(AUTHENTICATION_ERROR.getCode())
+					.businessErrorDescription(AUTHENTICATION_ERROR.getDescription())
 					.error(ex.getMessage())
 					.build()
 			);
