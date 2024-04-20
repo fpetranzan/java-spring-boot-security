@@ -2,7 +2,9 @@ package com.fpetranzan.security.controllers;
 
 import com.fpetranzan.security.models.auth.AuthenticationRequest;
 import com.fpetranzan.security.models.auth.AuthenticationResponse;
+import com.fpetranzan.security.models.auth.ForgotPasswordRequest;
 import com.fpetranzan.security.models.auth.RegisterRequest;
+import com.fpetranzan.security.models.auth.UpdatePasswordRequest;
 import com.fpetranzan.security.models.auth.VerificationRequest;
 import com.fpetranzan.security.services.AuthenticationService;
 import jakarta.mail.MessagingException;
@@ -30,7 +32,7 @@ public class AuthenticationController {
 		authenticationService.register(request);
 	}
 
-	@GetMapping("/{userId}/activate-account")
+	@GetMapping("/{userId}/verify-account")
 	public AuthenticationResponse activateAccount(@PathVariable Integer userId, @RequestParam String token) throws MessagingException {
 		return authenticationService.activateAccount(userId, token);
 	}
@@ -48,5 +50,15 @@ public class AuthenticationController {
 	@PostMapping("/verify")
 	public AuthenticationResponse verifyCode(@RequestBody @Valid VerificationRequest request) {
 		return authenticationService.verifyCode(request);
+	}
+
+	@GetMapping("/forgot-password")
+	public void forgotPassword(@RequestBody @Valid ForgotPasswordRequest request) throws MessagingException {
+		authenticationService.forgotPassword(request);
+	}
+
+	@PostMapping("/{userId}/update-password")
+	public void updatePassword(@PathVariable Integer userId, @RequestBody @Valid UpdatePasswordRequest request) throws MessagingException {
+		authenticationService.updatePassword(userId, request);
 	}
 }
