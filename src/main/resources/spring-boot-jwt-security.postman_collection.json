@@ -24,15 +24,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"if (pm.response.to.have.status(200)) {\r",
-							"    var user_id = pm.environment.get(\"LAST_CREATED_USER_ID\");\r",
-							"\r",
-							"    if (user_id != null) {\r",
-							"        pm.environment.set(\"LAST_CREATED_USER_ID\", user_id+1);\r",
-							"    } else {\r",
-							"        pm.environment.set(\"LAST_CREATED_USER_ID\", 1);\r",
-							"    }\r",
-							"}"
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -120,7 +112,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{env}}/api/v1/auth/{{LAST_CREATED_USER_ID}}/activate-account?token=841086",
+					"raw": "{{env}}/api/v1/auth/{{USER_ID}}/activate-account?token=889100",
 					"host": [
 						"{{env}}"
 					],
@@ -128,13 +120,13 @@
 						"api",
 						"v1",
 						"auth",
-						"{{LAST_CREATED_USER_ID}}",
+						"{{USER_ID}}",
 						"activate-account"
 					],
 					"query": [
 						{
 							"key": "token",
-							"value": "841086"
+							"value": "889100"
 						}
 					]
 				}
