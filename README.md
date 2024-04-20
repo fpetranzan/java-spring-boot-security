@@ -6,6 +6,7 @@ A MySQL database is used for data management.
 * User registration
 * Email verify
 * User login
+* Forgot Password
 * Two-factor authentication
 * Refresh token
 * Change password
