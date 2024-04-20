@@ -4,14 +4,14 @@ import com.fpetranzan.security.exceptions.NotFoundEmailStrategy;
 import com.fpetranzan.security.models.email.EmailTemplateName;
 import com.fpetranzan.security.models.user.User;
 import jakarta.mail.MessagingException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Objects;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SendEmailContext {
 	private final Map<EmailTemplateName, SendEmailStrategy> sendEmailByType;
 
