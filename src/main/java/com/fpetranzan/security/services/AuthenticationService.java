@@ -185,6 +185,42 @@ public class AuthenticationService {
 			.build();
 	}
 
+	public void forgotPassword(ForgotPasswordRequest request) throws MessagingException {
+		User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+		if (user.isEnabled()) {
+			sendEmailContext.sendMessage(EmailTemplateName.FORGOT_PASSWORD, user);
+			return;
+		}
+
+		throw new UserNotVerifiedException("User not verify, please check your inbox");
+	}
+
+	public void updatePassword(Integer userId, UpdatePasswordRequest request) throws MessagingException {
+		ActivationToken savedToken = activationTokenRepository.findByUserAndToken(userId, request.getCode()).orElseThrow(() -> new InvalidAuthTokenException("Invalid token"));
+		User user = savedToken.getUser();
+
+		if (LocalDateTime.now().isAfter(savedToken.getExpiredAt())) {
+			savedToken.setValidatedAt(LocalDateTime.of(1900, 1, 1, 0, 0, 0, 0));
+			activationTokenRepository.save(savedToken);
+
+			sendEmailContext.sendMessage(EmailTemplateName.FORGOT_PASSWORD, user);
+			throw new InvalidAuthTokenException("Activation token has expired. A new token has been send to the same email");
+		}
+
+		if(!request.getNewPassword().equals(request.getConfirmationPassword())) {
+			throw new WrongPasswordMatchException("Password are not the same");
+		}
+
+		savedToken.setValidatedAt(LocalDateTime.now());
+		user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+		userRepository.save(user);
+		activationTokenRepository.save(savedToken);
+
+		sendEmailContext.sendMessage(EmailTemplateName.PASSWORD_UPDATED, user);
+	}
+
 	private void revokeAllUserToken(User user) {
 		List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
 
