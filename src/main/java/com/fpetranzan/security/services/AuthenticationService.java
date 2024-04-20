@@ -18,9 +18,9 @@ import com.fpetranzan.security.models.token.TokenType;
 import com.fpetranzan.security.models.user.Role;
 import com.fpetranzan.security.models.user.User;
 import com.fpetranzan.security.repositories.UserRepository;
+import com.fpetranzan.security.strategies.SendEmailContext;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,11 +28,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -45,9 +42,7 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 	private final TwoFactorAuthenticationService tfaService;
 	private final ActivationTokenRepository activationTokenRepository;
-	private final EmailService emailService;
-	@Value("${application.mailing.frontend.activation-url}")
-	private String activationUrl;
+	private final SendEmailContext sendEmailContext;
 
 	public void register(RegisterRequest request) throws MessagingException {
 		userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
@@ -69,7 +64,7 @@ public class AuthenticationService {
 		}
 
 		userRepository.save(user);
-		sendValidationEmail(user);
+		sendEmailContext.sendMessage(EmailTemplateName.ACTIVATE_ACCOUNT, user);
 	}
 
 	public AuthenticationResponse activateAccount(Integer userId, String token) throws MessagingException {
@@ -79,7 +74,7 @@ public class AuthenticationService {
 			savedToken.setValidatedAt(LocalDateTime.of(1900, 1, 1, 0, 0, 0, 0));
 			activationTokenRepository.save(savedToken);
 
-			sendValidationEmail(savedToken.getUser());
+			sendEmailContext.sendMessage(EmailTemplateName.ACTIVATE_ACCOUNT, savedToken.getUser());
 			throw new InvalidAuthTokenException("Activation token has expired. A new token has been send to the same email");
 		}
 		savedToken.setValidatedAt(LocalDateTime.now());
@@ -101,8 +96,7 @@ public class AuthenticationService {
 		activationTokenRepository.save(savedToken);
 		userRepository.save(user);
 		saveUserToken(user, jwtToken);
-
-		sendConfirmationEmail(user);
+		sendEmailContext.sendMessage(EmailTemplateName.CONFIRM_ACCOUNT, user);
 
 		return AuthenticationResponse.builder()
 			.accessToken(jwtToken)
@@ -216,56 +210,6 @@ public class AuthenticationService {
 				.build();
 
 			tokenRepository.save(token);
-		}
-	}
-
-	private void sendValidationEmail(User user) throws MessagingException {
-		String activationToken = generateAndSaveActivationToken(user);
-
-		Map<String, Object> properties = new HashMap<>();
-		properties.put("username", user.getFullName());
-		properties.put("confirmation_url", String.format(activationUrl, user.getId()));
-		properties.put("activation_code", activationToken);
-
-		emailService.sendEmail("emailverify.no-reply@springBootJwtSecurity.com", user.getEmail(), EmailTemplateName.ACTIVATE_ACCOUNT, "Account activation", properties);
-	}
-
-	private void sendConfirmationEmail(User user) throws MessagingException {
-		Map<String, Object> properties = new HashMap<>();
-		properties.put("username", user.getFullName());
-
-		emailService.sendEmail("emailconfirmation.no-reply@springBootJwtSecurity.com", user.getEmail(), EmailTemplateName.CONFIRM_ACCOUNT, "Account confirmed", properties);
-	}
-
-	private String generateAndSaveActivationToken(User user) {
-		String generatedToken = generateActivationToken(6);
-		saveUserActivationToken(user, generatedToken);
-		return generatedToken;
-	}
-
-	private String generateActivationToken(int length) {
-		String characters = "0123456789";
-		StringBuilder codeBuilder = new StringBuilder();
-		SecureRandom secureRandom = new SecureRandom();
-
-		for (int i = 0; i < length; i++) {
-			int randomIndex = secureRandom.nextInt(characters.length());
-			codeBuilder.append(characters.charAt(randomIndex));
-		}
-
-		return codeBuilder.toString();
-	}
-
-	private void saveUserActivationToken(User user, String generatedToken) {
-		if (user != null && !generatedToken.equals("")) {
-			final ActivationToken token = ActivationToken.builder()
-				.user(user)
-				.token(generatedToken)
-				.createdAt(LocalDateTime.now())
-				.expiredAt(LocalDateTime.now().plusMinutes(15))
-				.build();
-
-			activationTokenRepository.save(token);
 		}
 	}
 }
