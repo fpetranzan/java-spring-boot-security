@@ -112,7 +112,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{env}}/api/v1/auth/{{USER_ID}}/activate-account?token=889100",
+					"raw": "{{env}}/api/v1/auth/1/verify-account?token=740004",
 					"host": [
 						"{{env}}"
 					],
@@ -120,14 +120,126 @@
 						"api",
 						"v1",
 						"auth",
-						"{{USER_ID}}",
-						"activate-account"
+						"1",
+						"verify-account"
 					],
 					"query": [
 						{
 							"key": "token",
-							"value": "889100"
+							"value": "740004"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forgot Password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"test@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env}}/api/v1/auth/forgot-password",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": \"013556\",\r\n    \"newPassword\": \"87654321\",\r\n    \"confirmationPassword\": \"87654321\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env}}/api/v1/auth/1/update-password",
+					"host": [
+						"{{env}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"1",
+						"update-password"
 					]
 				}
 			},
