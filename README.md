@@ -1,4 +1,4 @@
-# Spring Boot 3.0 Security with JWT Implementation
+# Spring Boot Security with JWT Implementation
 This project is a practical implementation of security using Spring Boot and JSON Web Tokens (JWT).
 A MySQL database is used for data management.
 
@@ -35,7 +35,7 @@ To get started with this project, you will need to have the following installed 
 
 To build and run the project, follow these steps:
 
-* Clone the repository: `https://github.com/fpetranzan/spring-boot-jwt-security.git`
+* Clone the repository: `https://github.com/fpetranzan/java-spring-boot-security`
 * Navigate to the project directory: cd spring-boot-security-jwt
 * Add database "jwt_security" to mysql
 * Build the project: mvn clean install
@@ -65,5 +65,5 @@ A postman collection has been created with all calls already defined.
 This way you can test all the created endpoints.
 You can retrieve the collection and import it to your Postman from here:
 
-[spring-boot-jwt-security - Postman Collection](https://github.com/fpetranzan/spring-boot-jwt-security/blob/master/src/main/resources/spring-boot-jwt-security.postman_collection.json)
+[java-spring-boot-security - Postman Collection](https://github.com/fpetranzan/spring-boot-jwt-security/blob/master/src/main/resources/spring-boot-jwt-security.postman_collection.json)
 
