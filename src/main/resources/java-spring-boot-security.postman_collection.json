@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "ab468f16-663b-4774-952c-d732ffe1b061",
-		"name": "spring-boot-jwt-security",
+		"name": "java-spring-boot-security",
 		"description": "a postman collection to run tests on the rest of the 'spring-boot-jwt-security' project calls.\n\nGITHUB: https://github.com/fpetranzan/spring-boot-jwt-security.git",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34122059"
