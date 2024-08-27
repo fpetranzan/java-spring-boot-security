@@ -1,4 +1,7 @@
 # Spring Boot Security with JWT Implementation
+
+lang [EN]: [en](https://github.com/fpetranzan/java-spring-boot-security/blob/master/README.md) | [it](https://github.com/fpetranzan/java-spring-boot-security/blob/master/README_it.md)
+
 This project is a practical implementation of security using Spring Boot and JSON Web Tokens (JWT).
 A MySQL database is used for data management.
 
@@ -37,7 +40,7 @@ To build and run the project, follow these steps:
 
 * Clone the repository: `https://github.com/fpetranzan/java-spring-boot-security`
 * Navigate to the project directory: cd spring-boot-security-jwt
-* Add database "jwt_security" to mysql
+* Add database "jwt_security" to MySQL
 * Build the project: mvn clean install
 * Run the project: mvn spring-boot:run
 
